@@ -49,15 +49,16 @@ struct AttendanceSingleChartView: View {
 
         // Daten in ein Array aus `MonthlyAttendance` konvertieren
         return (1...12).map { month in
-            MonthlyAttendance(month: monthName(for: month), attendanceCount: attendanceCounts[month, default: 0])
+            MonthlyAttendance(
+                month: monthName(for: month),
+                attendanceCount: attendanceCounts[month, default: 0])
         }
     }
 
     // Hilfsfunktion: Monatsname für einen Monat
     private func monthName(for month: Int) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
-        return formatter.monthSymbols[month - 1].capitalized
+        let shortMonthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
+        return shortMonthNames[month - 1] // month - 1, weil Array nullbasiert
     }
 }
 
