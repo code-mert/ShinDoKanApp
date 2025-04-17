@@ -27,6 +27,8 @@ struct AttendanceSummaryView: View {
         }
         .onAppear {
             loadMonthlyAttendanceCounts()
+            // Exportiert aktuelle CSV in AppData/Documents..-
+            //exportAttendanceCSV()
         }
     }
     
@@ -43,6 +45,37 @@ struct AttendanceSummaryView: View {
         }
         
         monthlyAttendanceCounts = attendanceCounts.enumerated().map { index, count in SumMonthlyAttendance(month: index + 1, count: count)}
+    }
+    @discardableResult
+    private func exportAttendanceCSV() -> URL {
+        var csvString = "Name,Anwesenheiten\n"
+
+        let filteredStudents = students.filter { $0.course == courseType }
+
+        for student in filteredStudents {
+            let name = "\(student.firstName) \(student.name)"
+            let dates = student.attendances
+                .filter { $0.isPresent }
+                .map { DateFormatter.localizedString(from: $0.date, dateStyle: .short, timeStyle: .none) }
+                .joined(separator: ",")
+            csvString += "\(name),\(dates)\n"
+        }
+
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            print("❌ Downloads-Verzeichnis nicht gefunden")
+            return URL(fileURLWithPath: "")
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
+        let timestamp = formatter.string(from: Date())
+        let filename = documentsURL.appendingPathComponent("Anwesenheiten_\(timestamp).csv", isDirectory: false)
+        do {
+            try csvString.write(to: filename, atomically: true, encoding: .utf8)
+            print("✅ CSV gespeichert unter: \(filename.path)")
+        } catch {
+            print("❌ Fehler beim Schreiben der CSV: \(error.localizedDescription)")
+        }
+        return filename
     }
 }
 
