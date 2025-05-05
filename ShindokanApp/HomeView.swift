@@ -10,36 +10,52 @@ import SwiftData
 
 struct HomeView: View { // Erstellung neuer Ansicht "HomeView"
     @Environment(\.modelContext) var modelContext
+    @State private var showAddEntry = false
     var body: some View {
         NavigationStack { // Ermöglicht Wechsel zwischen verschiedenen Ansichten
             VStack { // Ordnet die Inhalte vertikal an (oben nach unten)
-                NavigationLink(destination: StudentListView()) { // Knopf der beim Klicken auf StudentListView wechselt
-                    Text("Schüler Daten") // Text auf Knopf
-                        .font(.title) // Setzt Schriftgröße auf Titelgröße
-                        .frame(width: 300, height: 50)
-                        .padding() // Fügt Abstand um den Text hinzu
-                        .background(Color.orange) // Hintergrund des Knopfes
-                        .foregroundColor(.black) // Textfarbe
-                        .cornerRadius(10) // Macht die Ecken des Knopfes abgerundet
-                }
-                .padding() // Abstand um den Knopf
-                
-                NavigationLink(destination: CourseSelectionView()) {
-                    Text("Anwesenheitsliste")
+                HStack {
+                    Text("Zukünftige Ereignisse")
                         .font(.title)
-                        .frame(width: 300, height: 50)
-                        .padding()
-                        .background(Color.orange)
-                        .foregroundColor(.black)
-                        .cornerRadius(10)
+                        .bold()
+                    Spacer()
+                    Button(action: {
+                        showAddEntry = true
+                    }) {
+                        Image(systemName: "plus")
+                            .font(.title2)
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.vertical)
+                
+                Spacer()
+                
+                HStack {
+                    NavigationLink(destination: StudentListView()) {
+                        Image(systemName: "person.3.fill")
+                            .font(.title)
+                            .frame(width: 140, height: 50)
+                            .padding()
+                            .background(Color.orange)
+                            .foregroundColor(.black)
+                            .cornerRadius(10)
+                    }
+
+                    NavigationLink(destination: CourseSelectionView()) {
+                        Image(systemName: "list.bullet.clipboard")
+                            .font(.title)
+                            .frame(width: 140, height: 50)
+                            .padding()
+                            .background(Color.orange)
+                            .foregroundColor(.black)
+                            .cornerRadius(10)
+                    }
                 }
                 .padding()
-
-                Spacer() // Fügt flexiblen Raum hinzu, der den restlichen Platz ausfüllt und andere Elemente nach oben drückt.
-
-                CalendarView() // Zeigt Ansicht für den Kalender an
-                    .frame(height: 300) // Setzt Höhe des Kalenders auf 300 Punkte
-                    .padding()
+            }
+            .sheet(isPresented: $showAddEntry) {
+                AddCalendarEntryView()
             }
             .onAppear {
                 #if DEBUG
