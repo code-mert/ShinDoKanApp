@@ -19,6 +19,12 @@ struct StudentListView: View {
     @State private var studentToDelete: Student?
     
     var body: some View {
+        let filteredStudents = students.filter {
+            (filterText.isEmpty ||
+             "\($0.firstName) \($0.name)".localizedCaseInsensitiveContains(filterText) ||
+             String($0.birthDate.age()).contains(filterText))
+            && (selectedCourse == nil || $0.course == selectedCourse)
+        }
         NavigationStack { // Erstellt Navigation um zwischen verschiedenen Ansichten zu wechseln
             VStack {
                 VStack {
@@ -34,14 +40,10 @@ struct StudentListView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .padding(.horizontal)
+                    Text("Anzahl Schüler: \(filteredStudents.count)")
                 }
                 List { //Erstellung einer Liste
-                    ForEach(students.filter {
-                        (filterText.isEmpty ||
-                         "\($0.firstName) \($0.name)".localizedCaseInsensitiveContains(filterText) ||
-                         String($0.birthDate.age()).contains(filterText))
-                        && (selectedCourse == nil || $0.course == selectedCourse)
-                    }) { student in //Iteriert über die gefilterte 'student' Liste und erstellt für jeden 'student' ein Listenelement
+                    ForEach(filteredStudents) { student in //Iteriert über die gefilterte 'student' Liste und erstellt für jeden 'student' ein Listenelement
                         NavigationLink(destination: StudentDetailView(student: student)) {
                             VStack(alignment: .leading) { // Stapelt enthaltene Ansichten vertikal mit linker Ausrichtung
                                 Text("\(student.firstName) \(student.name)") // Zeigt vollständigen Namen an
@@ -111,4 +113,3 @@ extension DateFormatter { // Erweiterung von DateFormatter
         return formatter
     }
 }
-
