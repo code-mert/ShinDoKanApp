@@ -29,6 +29,8 @@ struct HomeView: View { // Erstellung neuer Ansicht "HomeView"
                 .padding(.horizontal)
                 .padding(.vertical)
                 
+                CalendarView()
+                
                 Spacer()
                 
                 HStack {
