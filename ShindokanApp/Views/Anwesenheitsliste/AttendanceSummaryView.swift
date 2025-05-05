@@ -75,6 +75,27 @@ struct AttendanceSummaryView: View {
             }
             .frame(height: 250)
             .padding()
+            
+            if let selected = selectedMonth {
+                Chart(dailyDetails(for: selected)) { item in
+                    BarMark(
+                        x: .value("Tag", item.label),
+                        y: .value("Anwesende", item.count)
+                    )
+                    .foregroundStyle(.orange)
+                }
+                .chartXAxis {
+                    AxisMarks(values: .automatic) { value in
+                        AxisGridLine().foregroundStyle(.clear)
+                        AxisTick()
+                        AxisValueLabel()
+                    }
+                }
+                .chartXScale(range: .plotDimension(padding: 20))
+                .frame(height: 300)
+                .padding(.horizontal)
+                .padding(.bottom)
+            }
         }
         .onAppear {
             loadAvailableYears()
@@ -140,10 +161,14 @@ struct DayDetail: Identifiable {
     var date: Date
     var count: Int
 
-    var dateString: String {
+    var label: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "E dd.MM"
-        return formatter.string(from: date)
+        formatter.dateFormat = "dd.MM"
+        let hiddenDate = formatter.string(from: date)
+        let weekdayFormatter = DateFormatter()
+        weekdayFormatter.dateFormat = "E"
+        let weekday = weekdayFormatter.string(from: date)
+        return "\(weekday)\u{200B}\(hiddenDate)" // Zero-width space trennt unsichtbar
     }
 }
 
@@ -154,25 +179,34 @@ extension AttendanceSummaryView {
         let year = selectedYear
         let filteredStudents = students.filter { $0.course == courseType }
 
-        var attendanceMap: [Date: Int] = [:]
+        let components = DateComponents(year: year, month: month.month)
+        guard let startOfMonth = calendar.date(from: components) else { return [] }
 
+        var dates: [Date] = []
+        var currentDate = startOfMonth
+
+        while calendar.component(.month, from: currentDate) == month.month {
+            let weekday = calendar.component(.weekday, from: currentDate)
+            if [2, 4, 6].contains(weekday) {
+                dates.append(calendar.startOfDay(for: currentDate))
+            }
+            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
+        }
+
+        var attendanceMap: [Date: Int] = [:]
         for student in filteredStudents {
             for attendance in student.attendances where attendance.isPresent {
-                let date = attendance.date
-                let dateComponents = calendar.dateComponents([.year, .month, .weekday], from: date)
-
-                if dateComponents.year == year &&
-                    dateComponents.month == month.month &&
-                    [2, 4, 6].contains(dateComponents.weekday ?? 0) {
-                    let day = calendar.startOfDay(for: date)
-                    attendanceMap[day, default: 0] += 1
+                let date = calendar.startOfDay(for: attendance.date)
+                if calendar.component(.year, from: date) == year &&
+                    calendar.component(.month, from: date) == month.month &&
+                    [2, 4, 6].contains(calendar.component(.weekday, from: date)) {
+                    attendanceMap[date, default: 0] += 1
                 }
             }
         }
 
-        return attendanceMap.map { (date, count) in
-            DayDetail(date: date, count: count)
+        return dates.map { date in
+            DayDetail(date: date, count: attendanceMap[date, default: 0])
         }
-        .sorted(by: { $0.date < $1.date })
     }
 }
