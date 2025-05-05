@@ -14,7 +14,7 @@ struct ShindokanApp: App { // Hauptstruktur der App
         WindowGroup { // Eine Container-View, die die Hauptansicht der App enthält ("ContentView")
             HomeView()
         }
-        .modelContainer(for: [Student.self, Attendance.self])
+        .modelContainer(for: [Student.self, Attendance.self, CalendarEntry.self])
     }
 }
 
