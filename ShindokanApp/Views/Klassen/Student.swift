@@ -16,24 +16,36 @@ class Student: Identifiable { // Identifiable erfordert, dass die Klasse eine ei
     @Attribute var birthDate: Date = Date()
     @Attribute var beltRaw: BeltGrade?
     @Attribute var weight: String
-    @Attribute var lastExamDate: Date
     @Attribute var course: Course
     @Relationship var attendances: [Attendance] = []
+    @Relationship var examDates: [ExamDate] = []
     
     // Falls beltGrade = 0, dann Standardwert Kyu9 verwendet
     var belt: BeltGrade {
         get { beltRaw ?? .kyu9}
         set { beltRaw = newValue}}
 
-    init(name: String, firstName: String, birthDate: Date, belt: BeltGrade?, weight: String, lastExamDate: Date, course: Course = .beginner) { // Initializer, der aufgerufen wird, wenn ein neues 'Student'-Objekt erstellt wird.
+    init(name: String, firstName: String, birthDate: Date, belt: BeltGrade?, weight: String, course: Course = .beginner) {
         self.id = UUID()
         self.name = name
         self.firstName = firstName
         self.birthDate = birthDate
         self.beltRaw = belt
         self.weight = weight
-        self.lastExamDate = lastExamDate
         self.course = course
+    }
+}
+
+@Model
+class ExamDate: Identifiable {
+    @Attribute(.unique) var id: UUID
+    @Attribute var date: Date
+    @Relationship var student: Student?
+
+    init(date: Date, student: Student? = nil) {
+        self.id = UUID()
+        self.date = date
+        self.student = student
     }
 }
 

@@ -31,7 +31,13 @@ struct StudentDetailView: View {
                 }
                 GridRow {
                     labelView("Letzter Prüfungstermin:")
-                    valueView(formatDate(student.lastExamDate))
+                    if let lastExam = student.examDates.sorted(by: { $0.date > $1.date }).first {
+                        NavigationLink(destination: ExamDatesListView(examDates: student.examDates, student: student)) {
+                            valueView(formatDate(lastExam.date))
+                        }
+                    } else {
+                        valueView("Keine Prüfung")
+                    }
                 }
                 GridRow {
                     labelView("Kurs:")
@@ -84,8 +90,55 @@ struct StudentDetailView: View {
         birthDate: Date(),
         belt: .kyu1,
         weight: "55",
-        lastExamDate: Date(),
         course: .advanced
     )
     StudentDetailView(student: exampleStudent)
+}
+
+struct ExamDatesListView: View {
+    @Environment(\.modelContext) private var modelContext
+    @State var newDate: Date = Date()
+    @State var examDates: [ExamDate]
+    var student: Student
+
+    var body: some View {
+        VStack {
+            DatePicker("Neuer Prüfungstermin", selection: $newDate, displayedComponents: .date)
+                .datePickerStyle(.compact)
+                .padding(.horizontal)
+
+            Button("Hinzufügen") {
+                let newExam = ExamDate(date: newDate, student: student)
+                examDates.append(newExam)
+                student.examDates.append(newExam)
+                modelContext.insert(newExam)
+            }
+            .padding(.bottom)
+
+            List {
+                ForEach(examDates.sorted(by: { $0.date > $1.date })) { exam in
+                    Text(formatDate(exam.date))
+                }
+                .onDelete(perform: deleteExam)
+            }
+        }
+        .navigationTitle("Prüfungstermine")
+    }
+
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return formatter.string(from: date)
+    }
+
+    private func deleteExam(at offsets: IndexSet) {
+        for index in offsets {
+            let exam = examDates.sorted(by: { $0.date > $1.date })[index]
+            if let idx = student.examDates.firstIndex(where: { $0.id == exam.id }) {
+                student.examDates.remove(at: idx)
+            }
+            modelContext.delete(exam)
+        }
+        examDates.remove(atOffsets: offsets)
+    }
 }

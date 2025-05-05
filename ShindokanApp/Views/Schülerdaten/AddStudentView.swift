@@ -16,8 +16,8 @@ struct AddStudentView: View { // Definiert neue Ansicht 'AddStudentView'
     @State var birthDate: Date = Date()
     @State var belt: BeltGrade = .kyu9
     @State var weight: String = ""
-    @State var lastExamDate: Date = Date() // Speichern der Eingabefelder
     @State var course: Course = .beginner
+    @State private var examDate: Date = Date()
     
     var studentToEdit: Student?
     
@@ -33,11 +33,11 @@ struct AddStudentView: View { // Definiert neue Ansicht 'AddStudentView'
                         ForEach(BeltGrade.allCases, id: \.self) { belt in Text(belt.rawValue).tag(belt)}
                     }
                     TextField("Gewicht in kg", text: $weight)
-                    DatePicker("Letzter Prüfungstermin", selection: $lastExamDate, displayedComponents: .date) // displayedComponents zeigt nur das Datum ohne Zeit an.
                     Picker("Kurs", selection: $course) {
                         ForEach(Course.allCases, id: \.self) { course in Text(course.rawValue).tag(course)}
                     }
                     .pickerStyle(DefaultPickerStyle())
+                    DatePicker("Prüfungstermin", selection: $examDate, displayedComponents: .date)
                 }
                 
                 Button(action: saveStudent) { // Button der 'addstudent' Funktion aufruft
@@ -59,7 +59,6 @@ struct AddStudentView: View { // Definiert neue Ansicht 'AddStudentView'
                     birthDate = student.birthDate
                     belt = student.belt
                     weight = student.weight
-                    lastExamDate = student.lastExamDate
                     course = student.course
                 }
             }
@@ -73,7 +72,6 @@ struct AddStudentView: View { // Definiert neue Ansicht 'AddStudentView'
             student.birthDate = birthDate
             student.belt = belt
             student.weight = weight
-            student.lastExamDate = lastExamDate
             student.course = course
         } else {
             // Erstellt 'Student' Objekt mit den Eingabewerten
@@ -83,9 +81,12 @@ struct AddStudentView: View { // Definiert neue Ansicht 'AddStudentView'
                 birthDate: birthDate,
                 belt: belt,
                 weight: weight,
-                lastExamDate: lastExamDate,
                 course: course)
-            modelContext.insert(newStudent) // Fügt dem 'modelContext' hinzu
+            modelContext.insert(newStudent)
+
+            let initialExam = ExamDate(date: examDate, student: newStudent)
+            newStudent.examDates.append(initialExam)
+            modelContext.insert(initialExam)
         }
         dismiss() // Ansicht schließen
     }
