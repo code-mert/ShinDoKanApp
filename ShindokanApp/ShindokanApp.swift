@@ -15,7 +15,6 @@ struct ShindokanApp: App { // Hauptstruktur der App
         WindowGroup { // Eine Container-View, die die Hauptansicht der App enthält ("ContentView")
             HomeView()
                 .onAppear {
-                    migrateExistingStudents(modelContext: modelContainer.mainContext)
                     createDemoStudentsIfNeeded(modelContext: modelContainer.mainContext)
                 }
         }
@@ -43,20 +42,6 @@ func createDemoStudentsIfNeeded(modelContext: ModelContext) {
     }
 
     try? modelContext.save()
-}
-
-func migrateExistingStudents(modelContext: ModelContext) {
-    let fetchDescriptor = FetchDescriptor<Student>()
-    if let allStudents = try? modelContext.fetch(fetchDescriptor) {
-        for student in allStudents {
-            if student.examDates.isEmpty {
-                let migratedExam = ExamDate(date: Date(), student: student)
-                student.examDates.append(migratedExam)
-                modelContext.insert(migratedExam)
-            }
-        }
-        try? modelContext.save()
-    }
 }
 
 // Erweiterung für Date zur Berechnung des Alters
