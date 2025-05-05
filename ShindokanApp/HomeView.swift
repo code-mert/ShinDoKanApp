@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View { // Erstellung neuer Ansicht "HomeView"
-    // @Environment(\.modelContext) var modelContext
+    @Environment(\.modelContext) var modelContext
     var body: some View {
         NavigationStack { // Ermöglicht Wechsel zwischen verschiedenen Ansichten
             VStack { // Ordnet die Inhalte vertikal an (oben nach unten)
@@ -40,6 +40,11 @@ struct HomeView: View { // Erstellung neuer Ansicht "HomeView"
                 CalendarView() // Zeigt Ansicht für den Kalender an
                     .frame(height: 300) // Setzt Höhe des Kalenders auf 300 Punkte
                     .padding()
+            }
+            .onAppear {
+                #if DEBUG
+                createDemoStudentsIfNeeded(modelContext: modelContext)
+                #endif
             }
             .navigationTitle("Shindokan App") // Titel der Navigationsleiste
         }

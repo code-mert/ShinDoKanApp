@@ -18,6 +18,23 @@ struct ShindokanApp: App { // Hauptstruktur der App
     }
 }
 
+// Hilfsfunktion: Legt Demodaten an, wenn keine Schüler existieren
+func createDemoStudentsIfNeeded(modelContext: ModelContext) {
+    let fetchDescriptor = FetchDescriptor<Student>()
+    let studentsCount = (try? modelContext.fetch(fetchDescriptor).count) ?? 0
+    guard studentsCount == 0 else { return }
+    // Beispiel-Demodaten
+    let demoStudents = [
+        Student(name: "Müller", firstName: "Lena", birthDate: Calendar.current.date(from: DateComponents(year: 2012, month: 3, day: 5))!, belt: .kyu9, weight: "35", lastExamDate: Date(), course: .beginner),
+        Student(name: "Schmidt", firstName: "Tom", birthDate: Calendar.current.date(from: DateComponents(year: 2010, month: 7, day: 14))!, belt: .kyu7, weight: "42", lastExamDate: Date(), course: .advanced),
+        Student(name: "Meier", firstName: "Anna", birthDate: Calendar.current.date(from: DateComponents(year: 2011, month: 11, day: 20))!, belt: .kyu8, weight: "37", lastExamDate: Date(), course: .beginner)
+    ]
+    for student in demoStudents {
+        modelContext.insert(student)
+    }
+    try? modelContext.save()
+}
+
 // Erweiterung für Date zur Berechnung des Alters
 extension Date {
     func age() -> Int {
@@ -27,6 +44,3 @@ extension Date {
         return ageComponents.year!
     }
 }
-
-
-
