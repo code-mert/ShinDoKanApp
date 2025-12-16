@@ -7,22 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FCB03FDD2C061CE800C9C5FA /* ShindokanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB03FDC2C061CE800C9C5FA /* ShindokanApp.swift */; };
-		FCB03FE12C061CE800C9C5FA /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB03FE02C061CE800C9C5FA /* Item.swift */; };
+		FC98B5702EF1B48A00D9A1F2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98B56A2EF1B48A00D9A1F2 /* SettingsView.swift */; };
+		FC98B5712EF1B48A00D9A1F2 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98B56C2EF1B48A00D9A1F2 /* HomeView.swift */; };
+		FC98B5722EF1B48A00D9A1F2 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98B56E2EF1B48A00D9A1F2 /* MainTabView.swift */; };
+		FC98B5742EF1BC9600D9A1F2 /* TrainingDaySettingsView 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98B5732EF1BC9600D9A1F2 /* TrainingDaySettingsView 2.swift */; };
+		FC98B5782EF1BDC500D9A1F2 /* ShindokanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98B5772EF1BDC500D9A1F2 /* ShindokanApp.swift */; };
 		FCB03FE32C061CEA00C9C5FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCB03FE22C061CEA00C9C5FA /* Assets.xcassets */; };
 		FCB03FE62C061CEA00C9C5FA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCB03FE52C061CEA00C9C5FA /* Preview Assets.xcassets */; };
-		FCB03FED2C0620AF00C9C5FA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB03FEC2C0620AF00C9C5FA /* HomeView.swift */; };
-		FCB03FF32C06212B00C9C5FA /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB03FF22C06212B00C9C5FA /* CalendarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FC98B56A2EF1B48A00D9A1F2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		FC98B56C2EF1B48A00D9A1F2 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		FC98B56E2EF1B48A00D9A1F2 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		FC98B5732EF1BC9600D9A1F2 /* TrainingDaySettingsView 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrainingDaySettingsView 2.swift"; sourceTree = "<group>"; };
+		FC98B5772EF1BDC500D9A1F2 /* ShindokanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShindokanApp.swift; sourceTree = "<group>"; };
 		FCB03FD92C061CE800C9C5FA /* ShindokanApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShindokanApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FCB03FDC2C061CE800C9C5FA /* ShindokanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShindokanApp.swift; sourceTree = "<group>"; };
-		FCB03FE02C061CE800C9C5FA /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		FCB03FE22C061CEA00C9C5FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FCB03FE52C061CEA00C9C5FA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		FCB03FEC2C0620AF00C9C5FA /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		FCB03FF22C06212B00C9C5FA /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		FCB03FFC2C062AC300C9C5FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -43,6 +45,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FC98B56B2EF1B48A00D9A1F2 /* Einstellungen */ = {
+			isa = PBXGroup;
+			children = (
+				FC98B5732EF1BC9600D9A1F2 /* TrainingDaySettingsView 2.swift */,
+				FC98B56A2EF1B48A00D9A1F2 /* SettingsView.swift */,
+			);
+			path = Einstellungen;
+			sourceTree = "<group>";
+		};
+		FC98B56D2EF1B48A00D9A1F2 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				FC98B56C2EF1B48A00D9A1F2 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		FC98B56F2EF1B48A00D9A1F2 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				FC98B56E2EF1B48A00D9A1F2 /* MainTabView.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
 		FCB03FD02C061CE800C9C5FA = {
 			isa = PBXGroup;
 			children = (
@@ -62,12 +89,10 @@
 		FCB03FDB2C061CE800C9C5FA /* ShindokanApp */ = {
 			isa = PBXGroup;
 			children = (
+				FC98B5772EF1BDC500D9A1F2 /* ShindokanApp.swift */,
 				FCB03FE42C061CEA00C9C5FA /* Preview Content */,
 				FCB03FFC2C062AC300C9C5FA /* Info.plist */,
-				FCB03FDC2C061CE800C9C5FA /* ShindokanApp.swift */,
-				FCB03FEC2C0620AF00C9C5FA /* HomeView.swift */,
 				FCF700012C074F5A006132DD /* Views */,
-				FCB03FE02C061CE800C9C5FA /* Item.swift */,
 				FCB03FE22C061CEA00C9C5FA /* Assets.xcassets */,
 			);
 			path = ShindokanApp;
@@ -84,9 +109,11 @@
 		FCF700012C074F5A006132DD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FC98B56B2EF1B48A00D9A1F2 /* Einstellungen */,
+				FC98B56D2EF1B48A00D9A1F2 /* Home */,
+				FC98B56F2EF1B48A00D9A1F2 /* Navigation */,
 				FC541D972D1DA16C00907BE5 /* Anwesenheitsliste */,
 				FC7D09922D1F2D7100717BE3 /* Schülerdaten */,
-				FCB03FF22C06212B00C9C5FA /* CalendarView.swift */,
 				FC541D9B2D1DD7E100907BE5 /* Klassen */,
 			);
 			path = Views;
@@ -125,7 +152,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1630;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					FCB03FD82C061CE800C9C5FA = {
 						CreatedOnToolsVersion = 15.4;
@@ -168,10 +195,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FCB03FF32C06212B00C9C5FA /* CalendarView.swift in Sources */,
-				FCB03FED2C0620AF00C9C5FA /* HomeView.swift in Sources */,
-				FCB03FE12C061CE800C9C5FA /* Item.swift in Sources */,
-				FCB03FDD2C061CE800C9C5FA /* ShindokanApp.swift in Sources */,
+				FC98B5742EF1BC9600D9A1F2 /* TrainingDaySettingsView 2.swift in Sources */,
+				FC98B5702EF1B48A00D9A1F2 /* SettingsView.swift in Sources */,
+				FC98B5712EF1B48A00D9A1F2 /* HomeView.swift in Sources */,
+				FC98B5722EF1B48A00D9A1F2 /* MainTabView.swift in Sources */,
+				FC98B5782EF1BDC500D9A1F2 /* ShindokanApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +266,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -296,6 +325,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};

@@ -10,10 +10,10 @@ import SwiftData
 
 @main // markiert Einstiegspunkt der App
 struct ShindokanApp: App { // Hauptstruktur der App
-    let modelContainer = try! ModelContainer(for: Student.self, Attendance.self, CalendarEntry.self, ExamDate.self)
+    let modelContainer = try! ModelContainer(for: Student.self, Attendance.self, ExamDate.self)
     var body: some Scene { // Hauptszene der App
         WindowGroup { // Eine Container-View, die die Hauptansicht der App enthält ("ContentView")
-            HomeView()
+            MainTabView()
                 .onAppear {
                     createDemoStudentsIfNeeded(modelContext: modelContainer.mainContext)
                 }
