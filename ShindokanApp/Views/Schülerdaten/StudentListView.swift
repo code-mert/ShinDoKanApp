@@ -9,23 +9,27 @@ import SwiftUI
 import SwiftData
 
 struct StudentListView: View {
-    @Environment(\.modelContext) private var modelContext //verwendet das "modelcontext" aus der Umgebung, um auf das Datenmodell zuzugreifen. Dies wird für Datenoperationen verwendet.
-    @Query(sort: \Student.name) private var students: [Student] // Definiert Abfrage, die eine sortierte Liste von 'Student'-Objekten nach Ihrem 'name' enthält
-    @State private var isPresentingAddStudentView = false //Verwaltet Zustand, ob das 'AddStudentView' Formular angezeigt wird oder nicht
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \Student.name) private var students: [Student]
+    @State private var isPresentingAddStudentView = false
     
     @State private var showAlert = false
     @State private var filterText = ""
     @State private var selectedCourse: Course? = nil
-    @State private var studentToDelete: Student?
+    @State private var studentToArchive: Student?
     
-    var body: some View {
-        let filteredStudents = students.filter {
+    var filteredStudentList: [Student] {
+        students.filter {
+            !$0.isArchived && // Nur aktive Schüler anzeigen
             (filterText.isEmpty ||
              "\($0.firstName) \($0.name)".localizedCaseInsensitiveContains(filterText) ||
              String($0.birthDate.age()).contains(filterText))
             && (selectedCourse == nil || $0.course == selectedCourse)
         }
-        NavigationStack { // Erstellt Navigation um zwischen verschiedenen Ansichten zu wechseln
+    }
+
+    var body: some View {
+        NavigationStack {
             VStack {
                 VStack {
                     TextField("Name oder Alter suchen", text: $filterText)
@@ -40,44 +44,48 @@ struct StudentListView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .padding(.horizontal)
-                    Text("Anzahl Schüler: \(filteredStudents.count)")
+                    Text("Anzahl Schüler: \(filteredStudentList.count)")
                 }
-                List { //Erstellung einer Liste
-                    ForEach(filteredStudents) { student in //Iteriert über die gefilterte 'student' Liste und erstellt für jeden 'student' ein Listenelement
+                List {
+                    ForEach(filteredStudentList) { student in
                         NavigationLink(destination: StudentDetailView(student: student)) {
-                            VStack(alignment: .leading) { // Stapelt enthaltene Ansichten vertikal mit linker Ausrichtung
-                                Text("\(student.firstName) \(student.name)") // Zeigt vollständigen Namen an
+                            VStack(alignment: .leading) {
+                                Text("\(student.firstName) \(student.name)")
                                     .font(.headline)
                                 Text("Alter: \(student.birthDate.age())")
                                 Text("Kurs: \(String(describing: student.course.rawValue))")
                             }
                         }
                     }
-                    .onDelete(perform: prepareToDeleteStudent)                          // Löschen durch Wischgeste
+                    .onDelete(perform: prepareToArchiveStudent)
                 }
             }
-            .toolbar { // Fügt Navigationsleiste ein Toolbar Element hinzu
-                ToolbarItem(placement: .topBarTrailing) {                                // Platziert das ToolbarElement am rechten Rand der Navigationsleiste
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
                     HStack {
-                        Button(action: {                                            // Knopf öffnet Formular 'AddStudentView'
-                        isPresentingAddStudentView = true
-                    }) {
-                        Image(systemName: "plus")                                   // Symbol auf dem Knopf
+                        NavigationLink(destination: ArchivedStudentsView()) {
+                            Image(systemName: "archivebox")
+                        }
+                        
+                        Button(action: {
+                            isPresentingAddStudentView = true
+                        }) {
+                            Image(systemName: "plus")
                         }
                     }
                 }
             }
-            .sheet(isPresented: $isPresentingAddStudentView) {                      // Zeigt ein modales Formular an, wenn isPresentingAddStudentView wahr ist.
-                AddStudentView() // Formular zum Hinzufügen
-                    .environment(\.modelContext, modelContext)                      // Stellt sicher, dass AddStudentView denselben modelContext verwendet
+            .sheet(isPresented: $isPresentingAddStudentView) {
+                AddStudentView()
+                    .environment(\.modelContext, modelContext)
             }
             .alert(isPresented: $showAlert) {
                 Alert(
-                    title: Text("Löschen bestätigen"),
-                    message: Text("Bist du sicher, dass \(studentToDelete?.firstName ?? "")\(studentToDelete?.name ?? "diesen Schüler") löschen möchten?"),
-                    primaryButton: .destructive(Text("Löschen")) {
-                        if let student = studentToDelete {
-                            deleteStudent(student: student)
+                    title: Text("Archivieren"),
+                    message: Text("Möchten Sie \(studentToArchive?.firstName ?? "")\(studentToArchive?.name ?? "diesen Schüler") wirklich archivieren?"),
+                    primaryButton: .destructive(Text("Archivieren")) {
+                        if let student = studentToArchive {
+                            archiveStudent(student: student)
                         }
                     },
                     secondaryButton: .cancel()
@@ -88,20 +96,19 @@ struct StudentListView: View {
         }
     }
     
-    private func prepareToDeleteStudent(at offsets: IndexSet) {                     // IndexSet gibt an, welche Zeilen in der Liste gelöscht werden soll.
+    private func prepareToArchiveStudent(at offsets: IndexSet) {
         if let index = offsets.first {
-            studentToDelete = students[index]                                       // Eine der Zahlen aus dem IndexSet, die auf bestimmten Schüler in der "students" Liste zeigt.
+            studentToArchive = filteredStudentList[index]
             showAlert = true
         }
     }
     
-    private func deleteStudent(student: Student) {                                  // Funktion Delete Student
-            modelContext.delete(student)                                            // Löscht den Schüler aus dem Datenmodell
-        
+    private func archiveStudent(student: Student) {
+        student.isArchived = true
         do {
             try modelContext.save()
         } catch {
-            print("Error saving context after delete: \(error)")
+            print("Error archiving student: \(error)")
         }
     }
 }

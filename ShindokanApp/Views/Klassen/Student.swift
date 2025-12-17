@@ -17,6 +17,7 @@ class Student: Identifiable { // Identifiable erfordert, dass die Klasse eine ei
     @Attribute var beltRaw: BeltGrade?
     @Attribute var weight: String
     @Attribute var course: Course
+    @Attribute var isArchived: Bool = false
     @Relationship var attendances: [Attendance] = []
     @Relationship var examDates: [ExamDate] = []
     

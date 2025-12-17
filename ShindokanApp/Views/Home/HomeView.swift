@@ -133,7 +133,7 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 #if DEBUG
-                createDemoStudentsIfNeeded(modelContext: modelContext)
+                // Demo data moved to ShindokanApp.swift
                 #endif
             }
         }
@@ -224,18 +224,18 @@ struct TrainingDayPickerView: View {
     private func generateDates() {
         let calendar = Calendar.current
         let today = Date()
-        // Range: -1 year to +1 year
-        guard let startDate = calendar.date(byAdding: .year, value: -1, to: today),
-              let endDate = calendar.date(byAdding: .year, value: 1, to: today) else { return }
+        // Range: Today to -1 year
+        guard let endDate = calendar.date(byAdding: .year, value: -1, to: today) else { return }
         
-        var date = startDate
+        var date = today
         var validDates: [Date] = []
         
-        while date <= endDate {
+        // Loop backwards from today to 1 year ago
+        while date >= endDate {
             if checkTrainingDay(date) {
                 validDates.append(date)
             }
-            date = calendar.date(byAdding: .day, value: 1, to: date) ?? date
+            date = calendar.date(byAdding: .day, value: -1, to: date) ?? date
         }
         
         availableDates = validDates
