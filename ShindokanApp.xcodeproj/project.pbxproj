@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FC53FFFF2EF322680089A542 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC53FFFD2EF322680089A542 /* OpenAIService.swift */; };
 		FC98B5702EF1B48A00D9A1F2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98B56A2EF1B48A00D9A1F2 /* SettingsView.swift */; };
 		FC98B5712EF1B48A00D9A1F2 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98B56C2EF1B48A00D9A1F2 /* HomeView.swift */; };
 		FC98B5722EF1B48A00D9A1F2 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98B56E2EF1B48A00D9A1F2 /* MainTabView.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FC53FFFD2EF322680089A542 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		FC98B56A2EF1B48A00D9A1F2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FC98B56C2EF1B48A00D9A1F2 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		FC98B56E2EF1B48A00D9A1F2 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
@@ -45,6 +47,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FC53FFFE2EF322680089A542 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				FC53FFFD2EF322680089A542 /* OpenAIService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		FC98B56B2EF1B48A00D9A1F2 /* Einstellungen */ = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +99,7 @@
 		FCB03FDB2C061CE800C9C5FA /* ShindokanApp */ = {
 			isa = PBXGroup;
 			children = (
+				FC53FFFE2EF322680089A542 /* Services */,
 				FC98B5772EF1BDC500D9A1F2 /* ShindokanApp.swift */,
 				FCB03FE42C061CEA00C9C5FA /* Preview Content */,
 				FCB03FFC2C062AC300C9C5FA /* Info.plist */,
@@ -195,6 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC53FFFF2EF322680089A542 /* OpenAIService.swift in Sources */,
 				FC98B5742EF1BC9600D9A1F2 /* TrainingDaySettingsView 2.swift in Sources */,
 				FC98B5702EF1B48A00D9A1F2 /* SettingsView.swift in Sources */,
 				FC98B5712EF1B48A00D9A1F2 /* HomeView.swift in Sources */,
