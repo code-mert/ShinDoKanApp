@@ -27,6 +27,8 @@ struct HomeView: View {
     @State private var isEditingPlan = false
     @State private var editedPlanContent = ""
     @State private var selectedFocus: TrainingFocus = .kumite
+    @State private var errorMessage: String?
+    @State private var showingError = false
     @AppStorage("workout_duration") private var duration = 60
     private let openAIService = OpenAIService()
     
@@ -264,7 +266,13 @@ struct HomeView: View {
                 }
             }
         }
-    }
+        .alert("Fehler", isPresented: $showingError, actions: {
+            Button("OK", role: .cancel) { }
+        }, message: {
+            Text(errorMessage ?? "Ein unbekannter Fehler ist aufgetreten.")
+        })
+        }
+
     
     // MARK: - Logic
     
@@ -286,7 +294,7 @@ struct HomeView: View {
             } catch {
                 await MainActor.run {
                     isGeneratingWorkout = false
-                    print("Error: \(error)")
+                    handleError(error)
                 }
             }
         }
@@ -310,9 +318,27 @@ struct HomeView: View {
         } catch {
             await MainActor.run {
                 isRegenerating = false
-                print("Error: \(error)")
+                handleError(error)
             }
         }
+    }
+    
+    private func handleError(_ error: Error) {
+        if let aiError = error as? OpenAIService.AIError {
+            switch aiError {
+            case .missingApiKey:
+                errorMessage = "API Key fehlt. Bitte in den Einstellungen hinterlegen."
+            case .networkError(let err):
+                errorMessage = "Netzwerkfehler: \(err.localizedDescription)"
+            case .invalidResponse:
+                errorMessage = "Ungültige Antwort vom Server."
+            case .decodingError:
+                errorMessage = "Fehler beim Verarbeiten der Antwort."
+            }
+        } else {
+            errorMessage = error.localizedDescription
+        }
+        showingError = true
     }
     
     private func startEditingPlan() {
@@ -447,7 +473,7 @@ struct StudentAttendanceRow: View {
     var body: some View {
         Button(action: toggleAttendance) {
             HStack {
-                Text("\(student.name), \(student.firstName)")
+                Text("\(student.firstName) \(student.name)")
                     .foregroundColor(.primary)
                     .bold()
                 Spacer()
@@ -554,7 +580,7 @@ struct StructuredPlanView: View {
     
     private func parseMarkdown(_ text: String) -> AttributedString {
         do {
-            var attributedString = try AttributedString(markdown: text)
+            let attributedString = try AttributedString(markdown: text)
             // Ensure font size consistency if markdown parser overrides it,
             // though usually it only affects traits like bold/italic.
             return attributedString
