@@ -23,10 +23,16 @@ struct ShindokanApp: App { // Hauptstruktur der App
 }
 
 // Hilfsfunktion: Legt Demodaten an, wenn keine Schüler existieren
+// Hilfsfunktion: Legt Demodaten an, wenn keine Schüler existieren
 func createDemoStudentsIfNeeded(modelContext: ModelContext) {
     #if targetEnvironment(simulator)
-    let fetchDescriptor = FetchDescriptor<Student>()
-    let existingStudents = (try? modelContext.fetch(fetchDescriptor)) ?? []
+    var fetchDescriptor = FetchDescriptor<Student>()
+    fetchDescriptor.fetchLimit = 1
+    
+    // Check if any student exists efficiently
+    if let count = try? modelContext.fetchCount(fetchDescriptor), count > 0 {
+        return
+    }
 
     let demoStudents = [
         Student(name: "Müller", firstName: "Lena", birthDate: Calendar.current.date(from: DateComponents(year: 2012, month: 3, day: 5))!, belt: .kyu9, weight: "35", course: .beginner),
@@ -43,24 +49,16 @@ func createDemoStudentsIfNeeded(modelContext: ModelContext) {
         Student(name: "Klein", firstName: "Lea", birthDate: Calendar.current.date(from: DateComponents(year: 2007, month: 6, day: 15))!, belt: .kyu4, weight: "50", course: .advanced)
     ]
 
-    var hasChanges = false
     for student in demoStudents {
-        // Prüfe, ob Schüler bereits existiert (Name & Vorname)
-        if !existingStudents.contains(where: { $0.name == student.name && $0.firstName == student.firstName }) {
-            modelContext.insert(student)
-            
-            // Füge ein initiales Prüfungsdatum hinzu (nur für neue Schüler)
-            let initialExam = ExamDate(date: Date(), student: student)
-            student.examDates.append(initialExam)
-            modelContext.insert(initialExam)
-            
-            hasChanges = true
-        }
+        modelContext.insert(student)
+        
+        // Füge ein initiales Prüfungsdatum hinzu (nur für neue Schüler)
+        let initialExam = ExamDate(date: Date(), student: student)
+        student.examDates.append(initialExam)
+        modelContext.insert(initialExam)
     }
 
-    if hasChanges {
-        try? modelContext.save()
-    }
+    try? modelContext.save()
     #endif
 }
 

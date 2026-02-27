@@ -214,7 +214,7 @@ struct HomeView: View {
                 .shadow(radius: 5)
                 .padding(.horizontal)
             }
-            .navigationTitle("ShinDoKan Dashboard")
+            .navigationTitle("ShinDoKan")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showingRegenerateSheet) {
                 NavigationStack {
